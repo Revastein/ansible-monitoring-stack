@@ -20,7 +20,7 @@
 
 - name: Install Docker Compose v2 plugin
   ansible.builtin.apt:
-    name: docker-compose-plugin
+    name: docker-compose-v2
     state: present
     update_cache: yes
   when: not docker_compose.stat.exists
