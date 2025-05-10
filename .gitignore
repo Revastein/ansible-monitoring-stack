@@ -1,0 +1,12 @@
+.vscode/
+.idea/
+
+.ansible/
+*.retry
+
+.env
+.log
+
+grafana/
+prometheus/
+docker-compose.yml
