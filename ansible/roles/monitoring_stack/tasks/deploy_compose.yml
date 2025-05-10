@@ -1,0 +1,27 @@
+- name: Copy Prometheus config
+  copy:
+    src: prometheus.yml
+    dest: "{{ project_root }}/prometheus/prometheus.yml"
+    mode: '0644'
+
+- name: Copy Grafana provisioning assets
+  copy:
+    src: "{{ item }}"
+    dest: "{{ project_root }}/grafana/provisioning/{{ item }}"
+    mode: '0644'
+  loop:
+    - datasources/prometheus.yml
+    - dashboards/home-dashboard.json
+
+- name: Copy Grafana custom.ini
+  copy:
+    src: custom.ini
+    dest: "{{ project_root }}/grafana/config/custom.ini"
+    mode: '0644'
+
+- name: Copy docker-compose.yml for monitoring stack
+  copy:
+    src: docker-compose.yml
+    dest: "{{ project_root }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart monitoring stack

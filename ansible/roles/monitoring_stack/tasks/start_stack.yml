@@ -1,0 +1,4 @@
+- name: Bring up monitoring stack containers
+  community.docker.docker_compose_v2:
+    project_src: "{{ project_root }}"
+    state: present

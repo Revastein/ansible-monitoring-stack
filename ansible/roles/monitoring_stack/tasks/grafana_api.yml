@@ -1,0 +1,50 @@
+- name: Upload Home dashboard
+  uri:
+    url: http://localhost:80/api/dashboards/db
+    user: admin
+    password: admin
+    method: POST
+    force_basic_auth: yes
+    body: "{{ lookup('file', role_path + '/files/dashboards/home-dashboard.json') }}"
+    body_format: json
+    status_code: 200
+
+- name: Get dashboard ID & UID
+  uri:
+    url: http://localhost:80/api/dashboards/uid/home-smoke
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    return_content: yes
+  register: dash
+
+- name: Get current org preferences
+  uri:
+    url: http://localhost:80/api/org/preferences
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    return_content: yes
+  register: org_prefs
+
+- name: Build updated preferences payload
+  set_fact:
+    updated_prefs: >-
+      {{
+        org_prefs.json
+        | combine({
+            'homeDashboardId': dash.json.dashboard.id,
+            'homeDashboardUID': 'home-smoke'
+          })
+      }}
+
+- name: Set home dashboard
+  uri:
+    url: http://localhost:80/api/org/preferences
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    method: PUT
+    body: "{{ updated_prefs }}"
+    body_format: json
+    status_code: 200

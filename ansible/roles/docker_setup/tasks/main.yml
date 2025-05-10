@@ -1,0 +1,27 @@
+- name: Check for Docker CLI
+  ansible.builtin.stat:
+    path: /usr/bin/docker
+  register: docker_cli
+  tags: [ install, docker ]
+
+- name: Install Docker engine
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+  when: not docker_cli.stat.exists
+  tags: [ install, docker ]
+
+- name: Check for Docker Compose CLI plugin
+  ansible.builtin.stat:
+    path: /usr/libexec/docker/cli-plugins/docker-compose
+  register: docker_compose
+  tags: [ install, docker ]
+
+- name: Install Docker Compose v2 plugin
+  ansible.builtin.apt:
+    name: docker-compose-plugin
+    state: present
+    update_cache: yes
+  when: not docker_compose.stat.exists
+  tags: [ install, docker ]

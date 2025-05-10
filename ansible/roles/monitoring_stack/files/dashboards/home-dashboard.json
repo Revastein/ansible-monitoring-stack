@@ -1,0 +1,238 @@
+{
+  "dashboard": {
+    "uid": "home-smoke",
+    "title": "Home Dashboard",
+    "version": 5,
+    "schemaVersion": 27,
+    "refresh": "auto",
+    "time": {
+      "from": "now-5m",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "type": "stat",
+        "title": "Log Ingest Rate (1min)",
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 6
+        },
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(filebeat_libbeat_pipeline_events{type=\"published\"}[1m])",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0.1
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                },
+                {
+                  "color": "yellow",
+                  "value": 600
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Write Errors (5min)",
+        "gridPos": {
+          "x": 12,
+          "y": 0,
+          "w": 12,
+          "h": 6
+        },
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "increase(filebeat_libbeat_output_events{type=\"failed\"}[5m])",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 1
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Active Harvesters",
+        "gridPos": {
+          "x": 0,
+          "y": 6,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "filebeat_filebeat_harvester{harvester=\"running\"}",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                },
+                {
+                  "color": "yellow",
+                  "value": 25
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Filebeat Memory (MiB)",
+        "gridPos": {
+          "x": 6,
+          "y": 6,
+          "w": 6,
+          "h": 5
+        },
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "filebeat_memstats_rss / 1024 / 1024",
+            "refId": "D"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "mebibytes",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 200
+                },
+                {
+                  "color": "red",
+                  "value": 400
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Filebeat Uptime (s)",
+        "gridPos": {
+          "x": 12,
+          "y": 6,
+          "w": 4,
+          "h": 5
+        },
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "filebeat_uptime_seconds_total",
+            "refId": "E"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Prometheus Series",
+        "gridPos": {
+          "x": 16,
+          "y": 6,
+          "w": 8,
+          "h": 5
+        },
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "prometheus_tsdb_head_series",
+            "refId": "F"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 5000
+                },
+                {
+                  "color": "red",
+                  "value": 20000
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "overwrite": true
+}

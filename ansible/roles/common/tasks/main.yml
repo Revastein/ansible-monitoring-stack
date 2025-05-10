@@ -1,0 +1,8 @@
+- name: Install base packages
+  apt:
+    name:
+      - curl
+      - git
+    state: present
+    update_cache: yes
+  tags: [ install, common ]

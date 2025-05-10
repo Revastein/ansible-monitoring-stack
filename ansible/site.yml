@@ -1,0 +1,9 @@
+- hosts: local
+  become: true
+  vars:
+    project_root: "{{ playbook_dir }}/.."
+  roles:
+    - common
+    - docker_setup
+    - filebeat_agent
+    - monitoring_stack

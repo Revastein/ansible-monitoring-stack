@@ -1,0 +1,9 @@
+- name: Ensure Prometheus & Grafana dirs exist
+  file:
+    path: "{{ project_root }}/{{ item }}"
+    state: directory
+  loop:
+    - prometheus
+    - grafana/config
+    - grafana/provisioning/datasources
+    - grafana/provisioning/dashboards
