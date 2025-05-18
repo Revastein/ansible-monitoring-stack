@@ -1,5 +1,7 @@
 # 🔍 Monitoring stack: Grafana + Prometheus + Filebeat (Ubuntu 24.04)
 
+[![CI](https://github.com/Revastein/ansible-monitoring-stack/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Revastein/ansible-monitoring-stack/actions/workflows/ci.yml)
+
 ## What you get
 
 | Component          | How it runs                      | Purpose                                                                                              |
