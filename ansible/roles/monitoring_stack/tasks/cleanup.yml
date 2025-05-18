@@ -18,7 +18,7 @@
     - "{{ project_root }}/docker-compose.yml"
     - "{{ project_root }}/prometheus"
     - "{{ project_root }}/grafana"
-  when: compose_file.stat.exists
+    - "{{ project_root }}/secrets"
 
 - name: Remove Filebeat test logs
   shell: rm -f /var/log/test*
