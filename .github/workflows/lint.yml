@@ -1,16 +1,13 @@
 name: CI
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
-    env:
-      ANSIBLE_COLLECTIONS_PATHS: ${{ github.workspace }}/.ansible/collections
-
     steps:
       - uses: actions/checkout@v3
 
@@ -29,6 +26,10 @@ jobs:
       - uses: ansible/ansible-lint-action@v6
         with:
           path: ansible/
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: /github/workspace/.ansible/collections
 
       - name: Syntax check
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: /github/workspace/.ansible/collections
         run: ansible-playbook -i localhost, -c local ansible/site.yml --syntax-check
