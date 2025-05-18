@@ -27,19 +27,21 @@ ansible-galaxy install -r ansible/requirements.yml
 sudo ansible-playbook -i ansible/inventory.ini ansible/site.yml --tags install
 ```
 
-Open in browser:
+## Open in Browser
 
-* [Grafana](http://localhost) – admin / admin
-* [Prometheus](http://localhost:9090)
+| Service        | URL                     | Credentials                                                                    |
+|----------------|-------------------------|--------------------------------------------------------------------------------|
+| **Grafana**    | <http://localhost>      | **user** - `admin` <br/> **password** `sudo cat ./secrets/.grafana_admin_pass` |
+| **Prometheus** | <http://localhost:9090> | —                                                                              |
 
 ## Partial runs
 
 | Task                                | Tag       | Command                             |
 |-------------------------------------|-----------|-------------------------------------|
 | Full deployment & startup           | `install` | `ansible-playbook … --tags install` |
+| Cleanup volumes & logs              | `cleanup` | `ansible-playbook … --tags cleanup` |
 | Only update dashboards / datasource | `grafana` | `ansible-playbook … --tags grafana` |
 | Bring up / restart Docker stack     | `stack`   | `ansible-playbook … --tags stack`   |
-| Cleanup volumes & logs              | `cleanup` | `ansible-playbook … --tags cleanup` |
 
 ## Home dashboard metrics
 
@@ -67,6 +69,7 @@ behavior (re-running a cleanup or install step can fail).
 
 **Q: Why Ansible overall?**  
 A:
+
 - **Idempotent** by design: each task only makes changes when needed.
 - **Agentless** SSH-based model—no extra software to install on targets.
 - **Modular**: reusable roles and collections (via Ansible Galaxy).
@@ -75,6 +78,7 @@ A:
 
 **Q: Why choose Filebeat over other log shippers?**  
 A:
+
 - **Lightweight**: written in Go, Filebeat’s memory footprint is modest (≈ 40–50 MB RAM) and CPU usage stays low even
   under heavy I/O.
 - **High throughput**: in benchmarks it handles volumes on par with Fluent Bit, outperforming heavier agents like
