@@ -1,21 +1,22 @@
+---
 - name: Add Elastic GPG key
   ansible.builtin.apt_key:
     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
-  tags: [ install ]
+  tags: [install]
 
 - name: Add Elastic apt repo
   ansible.builtin.apt_repository:
     repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
     state: present
-  tags: [ install ]
+  tags: [install]
 
 - name: Install Filebeat package
   ansible.builtin.apt:
     name: filebeat
     state: present
-    update_cache: yes
-  tags: [ install ]
+    update_cache: true
+  tags: [install]
 
 - name: Deploy Filebeat config
   ansible.builtin.copy:
@@ -23,13 +24,13 @@
     dest: /etc/filebeat/filebeat.yml
     owner: root
     group: root
-    mode: 0644
-  notify: restart filebeat
-  tags: [ install ]
+    mode: "0644"
+  notify: Restart filebeat
+  tags: [install]
 
 - name: Ensure Filebeat is running and enabled
   ansible.builtin.service:
     name: filebeat
     state: started
-    enabled: yes
-  tags: [ install ]
+    enabled: true
+  tags: [install]

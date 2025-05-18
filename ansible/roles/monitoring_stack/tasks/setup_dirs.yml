@@ -1,7 +1,9 @@
+---
 - name: Ensure Prometheus & Grafana dirs exist
-  file:
+  ansible.builtin.file:
     path: "{{ project_root }}/{{ item }}"
     state: directory
+    mode: "0755"
   loop:
     - prometheus
     - grafana/config

@@ -1,3 +1,4 @@
+---
 - name: Wait for Grafana port to be open
   ansible.builtin.wait_for:
     host: localhost
@@ -8,7 +9,7 @@
   ansible.builtin.uri:
     url: http://localhost:80/api/health
     status_code: 200
-    validate_certs: no
+    validate_certs: false
   register: grafana_health
   until: grafana_health.status == 200
   retries: 30

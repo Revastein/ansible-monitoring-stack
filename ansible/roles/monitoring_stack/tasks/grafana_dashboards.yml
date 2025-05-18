@@ -1,34 +1,35 @@
+---
 - name: Upload Home dashboard
-  uri:
+  ansible.builtin.uri:
     url: http://localhost:80/api/dashboards/db
     user: admin
     password: "{{ grafana_admin_password }}"
     method: POST
-    force_basic_auth: yes
+    force_basic_auth: true
     body: "{{ lookup('file', role_path + '/files/dashboards/home-dashboard.json') }}"
     body_format: json
     status_code: 200
 
 - name: Get dashboard ID & UID
-  uri:
+  ansible.builtin.uri:
     url: http://localhost:80/api/dashboards/uid/home-smoke
     user: admin
     password: "{{ grafana_admin_password }}"
-    force_basic_auth: yes
-    return_content: yes
+    force_basic_auth: true
+    return_content: true
   register: dash
 
 - name: Get current org preferences
-  uri:
+  ansible.builtin.uri:
     url: http://localhost:80/api/org/preferences
     user: admin
     password: "{{ grafana_admin_password }}"
-    force_basic_auth: yes
-    return_content: yes
+    force_basic_auth: true
+    return_content: true
   register: org_prefs
 
 - name: Build updated preferences payload
-  set_fact:
+  ansible.builtin.set_fact:
     updated_prefs: >-
       {{
         org_prefs.json
@@ -39,11 +40,11 @@
       }}
 
 - name: Set home dashboard
-  uri:
+  ansible.builtin.uri:
     url: http://localhost:80/api/org/preferences
     user: admin
     password: "{{ grafana_admin_password }}"
-    force_basic_auth: yes
+    force_basic_auth: true
     method: PUT
     body: "{{ updated_prefs }}"
     body_format: json

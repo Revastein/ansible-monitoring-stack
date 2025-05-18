@@ -1,3 +1,4 @@
+---
 filebeat.inputs:
   - type: filestream
     id: docker-logs
@@ -9,7 +10,7 @@ filebeat.inputs:
       - /var/lib/docker/containers/*/*-json.log
 
 processors:
-  - add_docker_metadata: ~
+  - add_docker_metadata:
 
 output.file:
   path: "/var/log"

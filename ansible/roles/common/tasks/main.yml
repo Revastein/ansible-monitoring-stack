@@ -1,8 +1,9 @@
+---
 - name: Install base packages
-  apt:
+  ansible.builtin.apt:
     name:
       - curl
       - git
     state: present
-    update_cache: yes
-  tags: [ install, common ]
+    update_cache: true
+  tags: [install, common]

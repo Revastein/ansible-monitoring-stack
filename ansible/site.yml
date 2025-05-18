@@ -1,4 +1,6 @@
-- hosts: local
+---
+- name: "Deploy the monitoring stack locally"
+  hosts: local
   become: true
   vars:
     project_root: "{{ playbook_dir }}/.."

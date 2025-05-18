@@ -1,5 +1,6 @@
-- name: restart filebeat
-  tags: [ install, beat ]
+---
+- name: Restart filebeat
+  tags: [install, beat]
   ansible.builtin.service:
     name: filebeat
     state: restarted

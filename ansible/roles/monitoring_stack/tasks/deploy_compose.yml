@@ -1,11 +1,12 @@
+---
 - name: Copy Prometheus config
-  copy:
+  ansible.builtin.copy:
     src: prometheus.yml
     dest: "{{ project_root }}/prometheus/prometheus.yml"
     mode: "0644"
 
 - name: Copy Grafana provisioning assets
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ project_root }}/grafana/provisioning/{{ item }}"
     mode: "0644"
@@ -14,7 +15,7 @@
     - dashboards/home-dashboard.json
 
 - name: Render docker-compose.yml from template
-  template:
+  ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ project_root }}/docker-compose.yml"
     mode: "0644"
