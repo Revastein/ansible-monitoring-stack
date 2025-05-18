@@ -1,0 +1,29 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ansible/ansible-lint-action@v6
+        with:
+          path: ansible/
+
+      - name: Cache Ansible collections
+        uses: actions/cache@v3
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-galaxy-${{ hashFiles('ansible/requirements.yml') }}
+          restore-keys: ${{ runner.os }}-galaxy-
+
+      - name: Install Galaxy collections
+        run: ansible-galaxy collection install -r ansible/requirements.yml
+
+      - name: Syntax check
+        run: ansible-playbook -i localhost, -c local ansible/site.yml --syntax-check
