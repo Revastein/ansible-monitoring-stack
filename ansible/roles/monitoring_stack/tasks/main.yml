@@ -1,6 +1,9 @@
 - import_tasks: setup_dirs.yml
   tags: [ install, stack ]
 
+- import_tasks: generate_secrets.yml
+  tags: [ install ]
+
 - import_tasks: deploy_compose.yml
   tags: [ install, stack ]
 
@@ -10,7 +13,7 @@
 - import_tasks: wait_services.yml
   tags: [ install, grafana ]
 
-- import_tasks: grafana_api.yml
+- import_tasks: grafana_dashboards.yml
   tags: [ install, grafana ]
 
 - import_tasks: cleanup.yml
