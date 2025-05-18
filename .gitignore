@@ -4,6 +4,7 @@
 .ansible/
 *.retry
 
+.venv/
 .env
 .log
 
