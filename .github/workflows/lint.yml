@@ -8,22 +8,26 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    env:
+      ANSIBLE_COLLECTIONS_PATHS: .ansible/collections
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ansible/ansible-lint-action@v6
-        with:
-          path: ansible/
-
-      - name: Cache Ansible collections
+      - name: Cache Galaxy collections
         uses: actions/cache@v3
         with:
-          path: ~/.ansible/collections
+          path: .ansible/collections
           key: ${{ runner.os }}-galaxy-${{ hashFiles('ansible/requirements.yml') }}
           restore-keys: ${{ runner.os }}-galaxy-
 
       - name: Install Galaxy collections
-        run: ansible-galaxy collection install -r ansible/requirements.yml
+        run: |
+          mkdir -p .ansible/collections
+          ansible-galaxy collection install -r ansible/requirements.yml -p .ansible/collections
+
+      - uses: ansible/ansible-lint-action@v6
+        with:
+          path: ansible/
 
       - name: Syntax check
         run: ansible-playbook -i localhost, -c local ansible/site.yml --syntax-check
