@@ -1,15 +1,16 @@
 name: CI
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     env:
-      ANSIBLE_COLLECTIONS_PATHS: .ansible/collections
+      ANSIBLE_COLLECTIONS_PATHS: ${{ github.workspace }}/.ansible/collections
+
     steps:
       - uses: actions/checkout@v3
 
