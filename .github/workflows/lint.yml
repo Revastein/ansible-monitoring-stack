@@ -1,4 +1,4 @@
-name: CI
+name: Lint
 on:
   push:
     branches: [ main ]
@@ -8,28 +8,25 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache Galaxy collections
-        uses: actions/cache@v3
+      - uses: actions/setup-python@v4
         with:
-          path: .ansible/collections
-          key: ${{ runner.os }}-galaxy-${{ hashFiles('ansible/requirements.yml') }}
-          restore-keys: ${{ runner.os }}-galaxy-
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install ansible + ansible-lint
+        run: |
+          python -m pip install --upgrade pip
+          pip install "ansible>=2.17" ansible-lint
 
       - name: Install Galaxy collections
-        run: |
-          mkdir -p .ansible/collections
-          ansible-galaxy collection install -r ansible/requirements.yml -p .ansible/collections
+        run: ansible-galaxy collection install -r ansible/requirements.yml
 
-      - uses: ansible/ansible-lint-action@v6
-        with:
-          path: ansible/
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: /github/workspace/.ansible/collections
+      - name: Run ansible-lint
+        run: ansible-lint ansible/
 
       - name: Syntax check
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: /github/workspace/.ansible/collections
         run: ansible-playbook -i localhost, -c local ansible/site.yml --syntax-check
