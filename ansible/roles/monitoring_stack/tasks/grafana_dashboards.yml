@@ -2,7 +2,7 @@
   uri:
     url: http://localhost:80/api/dashboards/db
     user: admin
-    password: admin
+    password: "{{ grafana_admin_password }}"
     method: POST
     force_basic_auth: yes
     body: "{{ lookup('file', role_path + '/files/dashboards/home-dashboard.json') }}"
@@ -13,7 +13,7 @@
   uri:
     url: http://localhost:80/api/dashboards/uid/home-smoke
     user: admin
-    password: admin
+    password: "{{ grafana_admin_password }}"
     force_basic_auth: yes
     return_content: yes
   register: dash
@@ -22,7 +22,7 @@
   uri:
     url: http://localhost:80/api/org/preferences
     user: admin
-    password: admin
+    password: "{{ grafana_admin_password }}"
     force_basic_auth: yes
     return_content: yes
   register: org_prefs
@@ -42,7 +42,7 @@
   uri:
     url: http://localhost:80/api/org/preferences
     user: admin
-    password: admin
+    password: "{{ grafana_admin_password }}"
     force_basic_auth: yes
     method: PUT
     body: "{{ updated_prefs }}"
