@@ -17,9 +17,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install ansible + ansible-lint
-        run: |
-          python -m pip install --upgrade pip
-          pip install "ansible>=2.17" ansible-lint
+        run: python -m pip install --upgrade pip && pip install "ansible>=2.17" ansible-lint -q
 
       - name: Install Galaxy collections
         run: ansible-galaxy collection install -r ansible/requirements.yml
