@@ -1,0 +1,60 @@
+services:
+  prometheus:
+    image: prom/prometheus:{{ prometheus_version }}
+    restart: unless-stopped
+    ports: [ "9090:9090" ]
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    healthcheck:
+      test: [ "CMD-SHELL","wget -qO- http://127.0.0.1:9090/-/ready || exit 1" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [ monitoring ]
+
+  beat-exporter:
+    image: trustpilot/beat-exporter:{{ beat_exporter_version }}
+    command: ["-beat.uri=http://172.17.0.1:5066"]
+    restart: unless-stopped
+    ports: ["9479:9479"]
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://127.0.0.1:9479/metrics || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [monitoring]
+
+  grafana:
+    image: grafana/grafana:{{ grafana_version }}
+    restart: unless-stopped
+    ports: [ "80:3000" ]
+    secrets:
+      - grafana_admin_password
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: "{{ grafana_admin_password }}"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    depends_on:
+      beat-exporter:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL","wget -qO- http://127.0.0.1:3000/api/health || exit 1" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [ monitoring ]
+
+secrets:
+  grafana_admin_password:
+    file: ./secrets/grafana_admin_password
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  monitoring:
