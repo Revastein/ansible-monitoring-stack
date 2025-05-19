@@ -19,13 +19,16 @@
 ## Quick start (90 seconds)
 
 ```bash
-# 1. Clone repository
+# (Optional) Clone this repo, or just copy the ansible folder into your own project
 git clone https://github.com/Revastein/ansible-monitoring-stack && cd ansible-monitoring-stack
 
-# 2. Install required Ansible collections
+# (Optional) Install Ansible if it's missing
+ansible --version || (sudo apt update && sudo apt install -y ansible)
+
+# Install required Ansible collections
 ansible-galaxy install -r ansible/requirements.yml
 
-# 3. Install everything
+# Install everything (Grafana, Prometheus, Filebeat, etc.)
 sudo ansible-playbook -i ansible/inventory.ini ansible/site.yml --tags install
 ```
 
